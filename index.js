@@ -1,7 +1,6 @@
 'use strict';
 
-var fs         = require('fs');
-var slidercalc = require('./lib/slidercalc.js');
+var fs = require('fs');
 
 function beatmapParser() {
   var beatmap = {
@@ -242,17 +241,7 @@ function beatmapParser() {
         hitObject.edges.push(edge);
       }
 
-      // get coordinates of the slider endpoint
-      var endPoint = slidercalc.getEndPoint(hitObject.curveType, hitObject.pixelLength, hitObject.points);
-      if (endPoint && endPoint[0] && endPoint[1]) {
-        hitObject.endPosition = [
-          Math.round(endPoint[0]),
-          Math.round(endPoint[1])
-        ];
-      } else {
-        // If endPosition could not be calculated, approximate it by setting it to the last point
-        hitObject.endPosition = hitObject.points[hitObject.points.length - 1];
-      }
+      hitObject.endPosition = hitObject.points[hitObject.points.length - 1];
     } else {
       // Unknown
       hitObject.objectName = 'unknown';
