@@ -34,9 +34,9 @@ function beatmapParser() {
    * @param  {Integer} offset
    * @return {Object} timingPoint
    */
-  var getTimingPoint = function (offset) {
+  var getTimingPoint = function (offset, inherited) {
     for (var i = beatmap.timingPoints.length - 1; i >= 0; i--) {
-      if (beatmap.timingPoints[i].offset <= offset) { return beatmap.timingPoints[i]; }
+      if (beatmap.timingPoints[i].offset <= offset && !beatmap.timingPoints[i].timingChange) { return beatmap.timingPoints[i]; }
     }
     return beatmap.timingPoints[0];
   };
@@ -191,7 +191,7 @@ function beatmapParser() {
       /**
        * Calculate slider duration
        */
-      var timing = getTimingPoint(hitObject.startTime);
+      var timing = getTimingPoint(hitObject.startTime, true);
 
       if (timing) {
         var pxPerBeat      = beatmap.SliderMultiplier * 100 * timing.velocity;
