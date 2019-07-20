@@ -35,8 +35,13 @@ function beatmapParser() {
    * @return {Object} timingPoint
    */
   var getTimingPoint = function (offset, inherited) {
+    if (inherited === undefined)
+      inherited = false;
+
     for (var i = beatmap.timingPoints.length - 1; i >= 0; i--) {
-      if (beatmap.timingPoints[i].offset <= offset && !beatmap.timingPoints[i].timingChange) { return beatmap.timingPoints[i]; }
+      if (beatmap.timingPoints[i].offset <= offset && beatmap.timingPoints[i].timingChange != inherited) {
+        return beatmap.timingPoints[i];
+      }
     }
     return beatmap.timingPoints[0];
   };
@@ -192,11 +197,12 @@ function beatmapParser() {
        * Calculate slider duration
        */
       var timing = getTimingPoint(hitObject.startTime, true);
+      var timingBpm = getTimingPoint(hitObject.startTime);
 
       if (timing) {
         var pxPerBeat      = beatmap.SliderMultiplier * 100 * timing.velocity;
         var beatsNumber    = (hitObject.pixelLength * hitObject.repeatCount) / pxPerBeat;
-        hitObject.duration = Math.ceil(beatsNumber * timing.beatLength);
+        hitObject.duration = Math.ceil(beatsNumber * timingBpm.beatLength);
         hitObject.endTime  = hitObject.startTime + hitObject.duration;
       }
       /**
