@@ -199,12 +199,13 @@ function beatmapParser() {
       var timing = getTimingPoint(hitObject.startTime, true);
       var timingBpm = getTimingPoint(hitObject.startTime);
 
-      if (timing) {
-        var pxPerBeat      = beatmap.SliderMultiplier * 100 * timing.velocity;
-        var beatsNumber    = (hitObject.pixelLength * hitObject.repeatCount) / pxPerBeat;
-        hitObject.duration = Math.ceil(beatsNumber * timingBpm.beatLength);
-        hitObject.endTime  = hitObject.startTime + hitObject.duration;
-      }
+      let velocity = timingBpm.offset > timing.offset ? 1 : timing.velocity;
+
+      var pxPerBeat      = beatmap.SliderMultiplier * 100 * velocity;
+      var beatsNumber    = (hitObject.pixelLength * hitObject.repeatCount) / pxPerBeat;
+      hitObject.velocity = velocity;
+      hitObject.duration = Math.ceil(beatsNumber * timingBpm.beatLength);
+      hitObject.endTime  = hitObject.startTime + hitObject.duration;
       /**
        * Parse slider points
        */
